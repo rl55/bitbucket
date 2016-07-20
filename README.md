@@ -1,4 +1,6 @@
-# Atlassian Stash
+# Atlassian Bitbucket
+
+Forket from [atende/stash](https://github.com/atende/stash) and updated to use Bitbucket instead of Stash.
 
 On-premises source code management for Git that's secure, fast, and enterprise grade. Create and manage repositories, set up fine-grained permissions, and collaborate on code – all with the flexibility of your servers.
 
@@ -8,14 +10,14 @@ for the installation of other Atlassian Products.
 
 ## Instalation
 
-Is best practice to separate the data from the container. This instalation process
+Is best practice to separate the data from the container. This installation process
 will assume this.
 
-### 1. Create a data-only container for stash
+### 1. Create a data-only container for bitbucket
 
-Create a data-only container from Busybox (very small footprint) and name it "stash\_datastore":
+Create a data-only container from Busybox (very small footprint) and name it "bitbucket\_datastore":
 
-    docker run -v /opt/crowd-home --name=stash\_datastore -d busybox echo "stash data"
+    docker run -v /opt/crowd-home --name=bitbucket\_datastore -d busybox echo "bitbucket data"
 
 **NOTE**: data-only containers don't have to run / be active to be used.
 
@@ -25,8 +27,8 @@ See: [POSTGRESQL](POSTGRESQL.md)
 
 ### 3. Start the Software container
 
-    docker run -d --name stash -p 7990:7990 -p 7999:7999 --link postgresql:db atende/stash \
-    --volumes-from stash\_datastore
+    docker run -d --name bitbucket -p 7990:7990 -p 7999:7999 --link postgresql:db atende/bitbucket \
+    --volumes-from bitbucket\_datastore
 
 The port 7999 is used to SSH git access and 7990 for web access
 
@@ -62,14 +64,14 @@ The startup script for crane command could be something like that:
 
 ## Single Single On with Crowd
 
-Atlassian applications could be configured to talk in Single Single On with Crowd software. Some applications has different configuration procedures, such as Stash, but for this that have the same procedure as Jira, that is, the configuration is created by file modifications in the tomcat instalation there is a automatic way to create such config in this container. This is important, because the docker principle is that container are disposable, and you don't want to tight couple its configuration to the container, because you need to recreate this configs each time you update a container. Unfortunnely some aspects of the configuration for atlassian products violates this principle, the proxy configuration and Single Single On are some examples.
+Atlassian applications could be configured to talk in Single Single On with Crowd software. Some applications has different configuration procedures, such as Bitbucket, but for this that have the same procedure as Jira, that is, the configuration is created by file modifications in the tomcat instalation there is a automatic way to create such config in this container. This is important, because the docker principle is that container are disposable, and you don't want to tight couple its configuration to the container, because you need to recreate this configs each time you update a container. Unfortunnely some aspects of the configuration for atlassian products violates this principle, the proxy configuration and Single Single On are some examples.
 
 To recreate the Single Single On config the procedure was automated for the softwares:
 
 * Jira
 * Bamboo
 * Confluence
-* Stash - Stash has a different procedure, but you can create the file needed, transparent
+* Bitbucket - Bitbucket has a different procedure, but you can create the file needed, transparent
 
 ### How it works
 
@@ -85,7 +87,7 @@ When this 3 variables are seted the follow is generated:
 
 1. File _WEB-INF/classes/seraph-config.xml_ is updated according with the documentation of each application, it is, the **<authenticator>** tag is replaced
 2. File _WEB-INF/classes/crowd.properties file is created
-3. For stash line is added to the file **stash-home/shared/stash-config.properties** with a the content **"plugin.auth-crowd.sso.enabled=true"**
+3. For bitbucket line is added to the file **bitbucket-home/shared/bitbucket-config.properties** with a the content **"plugin.auth-crowd.sso.enabled=true"**
 
 You will need to prepare and configure each application before the change, read: https://confluence.atlassian.com/display/CROWD/Adding+an+Application for details.
 
