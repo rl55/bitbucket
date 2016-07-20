@@ -2,9 +2,9 @@ FROM atende/baseimage-jdk
 
 MAINTAINER Giovanni Silva giovanni@atende.info
 
-ENV SOFTWARE_NAME=stash
+ENV SOFTWARE_NAME=bitbucket
 
-ENV SOFTWARE_VERSION=3.10.2
+ENV SOFTWARE_VERSION=4.8.0
 
 ENV SOFTWARE_PORT=7990
 ENV STASH_HOME /opt/stash-home
