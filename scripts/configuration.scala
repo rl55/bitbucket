@@ -81,7 +81,7 @@ XML.save(tomcatFile, finalTransformation, "UTF-8", true, null)
 val softwareHome = if(SOFTWARE_NAME == "confluence") TOMCAT_LOCATION + s"/confluence" else TOMCAT_LOCATION + s"/atlassian-${SOFTWARE_NAME}"
 val seraphFile = softwareHome + "/WEB-INF/classes/seraph-config.xml"
 val crowdPropertiesFile = softwareHome + "/WEB-INF/classes/crowd.properties"
-val stashConfigProperties = "/opt/stash-home/shared/stash-config.properties"
+val stashConfigProperties = "/opt/stash-home/shared/bitbucket.properties"
 val stashConfigPropertiesOriginal = "/opt/stash-home/shared/stash-config.original.properties"
 for {
   crowdUrl <- CROWD_URL
