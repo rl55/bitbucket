@@ -7,7 +7,8 @@ ENV SOFTWARE_NAME=bitbucket
 ENV SOFTWARE_VERSION=4.8.0
 
 ENV SOFTWARE_PORT=7990
-ENV STASH_HOME /opt/stash-home
+ENV BITBUCKET_HOME /opt/bitbucket-home
+ENV STASH_HOME /opt/bitbucket-home
 
 ENV SCALA_HOME /usr/local/scala
 
