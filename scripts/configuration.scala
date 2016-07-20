@@ -58,14 +58,14 @@ val CROWD_URL = sys.env.get("CROWD_URL")
 val CROWD_PASSWORD = sys.env.get("CROWD_PASSWORD")
 val CROWD_APPLICATION_NAME = sys.env.get("CROWD_APPLICATION_NAME")
 
-val tomcatFile = if(SOFTWARE_NAME=="stash") "/opt/stash-home/shared/server.xml" else TOMCAT_LOCATION + "/conf/server.xml"
-val tomcatFileOriginal = if(SOFTWARE_NAME=="stash") "/opt/stash-home/shared/server.original.xml" else TOMCAT_LOCATION + "/conf/server.original.xml"
+val tomcatFile = if(SOFTWARE_NAME=="bitbucket") "/opt/bitbucket-home/shared/server.xml" else TOMCAT_LOCATION + "/conf/server.xml"
+val tomcatFileOriginal = if(SOFTWARE_NAME=="bitbucket") "/opt/bitbucket-home/shared/server.original.xml" else TOMCAT_LOCATION + "/conf/server.original.xml"
 
 implicit def toPath (filename: String) = get(filename)
 if(!exists(tomcatFileOriginal) && exists(tomcatFile)){
    copy (tomcatFile, tomcatFileOriginal , REPLACE_EXISTING)
-}else if(!exists(tomcatFileOriginal) && SOFTWARE_NAME=="stash"){
-  copy("/opt/stash/conf/server.xml", tomcatFileOriginal, REPLACE_EXISTING)
+}else if(!exists(tomcatFileOriginal) && SOFTWARE_NAME=="bitbucket"){
+  copy("/opt/bitbucket/conf/server.xml", tomcatFileOriginal, REPLACE_EXISTING)
 }
 
 val tomcatXml = XML.loadFile(tomcatFileOriginal)
@@ -81,29 +81,29 @@ XML.save(tomcatFile, finalTransformation, "UTF-8", true, null)
 val softwareHome = if(SOFTWARE_NAME == "confluence") TOMCAT_LOCATION + s"/confluence" else TOMCAT_LOCATION + s"/atlassian-${SOFTWARE_NAME}"
 val seraphFile = softwareHome + "/WEB-INF/classes/seraph-config.xml"
 val crowdPropertiesFile = softwareHome + "/WEB-INF/classes/crowd.properties"
-val stashConfigProperties = "/opt/stash-home/shared/bitbucket.properties"
-val stashConfigPropertiesOriginal = "/opt/stash-home/shared/stash-config.original.properties"
+val bitbucketConfigProperties = "/opt/bitbucket-home/shared/bitbucket.properties"
+val bitbucketConfigPropertiesOriginal = "/opt/bitbucket-home/shared/bitbucket-config.original.properties"
 for {
   crowdUrl <- CROWD_URL
   crowdPassword <- CROWD_PASSWORD
   crowdAppName <- CROWD_APPLICATION_NAME
 } yield {
-  if(SOFTWARE_NAME != "stash"){
+  if(SOFTWARE_NAME != "bitbucket"){
     val seraphXml = XML.loadFile(seraphFile)
     val seraphTransform = new RuleTransformer(new SeraphSSOTransform(SOFTWARE_NAME))(seraphXml)
     XML.save(seraphFile, seraphTransform)
     val crowdProperties = createCrowProperties(crowdAppName, crowdPassword, crowdUrl)
     Files.write(Paths.get(crowdPropertiesFile), crowdProperties.getBytes(StandardCharsets.UTF_8))
   }else {
-    if(exists(stashConfigPropertiesOriginal)){
-      copy (stashConfigPropertiesOriginal, stashConfigProperties, REPLACE_EXISTING)
-      Files.write(Paths.get(stashConfigProperties), "plugin.auth-crowd.sso.enabled=true".getBytes(StandardCharsets.UTF_8), APPEND)
-    }else if(exists(stashConfigProperties)){
-      copy (stashConfigProperties, stashConfigPropertiesOriginal, REPLACE_EXISTING)
-      Files.write(Paths.get(stashConfigProperties),"plugin.auth-crowd.sso.enabled=true".getBytes(StandardCharsets.UTF_8), APPEND)
+    if(exists(bitbucketConfigPropertiesOriginal)){
+      copy (bitbucketConfigPropertiesOriginal, bitbucketConfigProperties, REPLACE_EXISTING)
+      Files.write(Paths.get(bitbucketConfigProperties), "plugin.auth-crowd.sso.enabled=true".getBytes(StandardCharsets.UTF_8), APPEND)
+    }else if(exists(bitbucketConfigProperties)){
+      copy (bitbucketConfigProperties, bitbucketConfigPropertiesOriginal, REPLACE_EXISTING)
+      Files.write(Paths.get(bitbucketConfigProperties),"plugin.auth-crowd.sso.enabled=true".getBytes(StandardCharsets.UTF_8), APPEND)
     }else{
-      Files.createFile(stashConfigPropertiesOriginal)
-      Files.write(Paths.get(stashConfigProperties), "plugin.auth-crowd.sso.enabled=true".getBytes(StandardCharsets.UTF_8))
+      Files.createFile(bitbucketConfigPropertiesOriginal)
+      Files.write(Paths.get(bitbucketConfigProperties), "plugin.auth-crowd.sso.enabled=true".getBytes(StandardCharsets.UTF_8))
     }
 
   }
