@@ -28,11 +28,11 @@ containers:
       volume: ["/opt/confluence-home"]
       cmd: ["echo","'confluence data'"]
       detach: true
-  stash_home:
+  bitbucket_home:
     image: busybox
     run:
-      volume: ["/opt/stash-home"]
-      cmd: ["echo","'stash data'"]
+      volume: ["/opt/bitbucket-home"]
+      cmd: ["echo","'bitbucket data'"]
       detach: true
   crowd_home:
     image: busybox
@@ -62,11 +62,11 @@ containers:
       publish: ["8090:8090"]
       link: ["postgresql:db"]
       detach: true
-  stash:
-    image: atende/stash
+  bitbucket:
+    image: rl55/bitbucket
     run:
       env: ["VIRTUAL_HOST=code.company.com","PROXY_SCHEME=https","PROXY_PORT=443","PROXY_SECURED=true"]
-      volumes-from: ["stash_home"]
+      volumes-from: ["bitbucket_home"]
       publish: ["7990:7990"]
       link: ["postgresql:db"]
       detach: true
