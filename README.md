@@ -27,7 +27,7 @@ See: [POSTGRESQL](POSTGRESQL.md)
 
 ### 3. Start the Software container
 
-    docker run -d --name bitbucket -p 7990:7990 -p 7999:7999 --link postgresql:db atende/bitbucket \
+    docker run -d --name bitbucket -p 7990:7990 -p 7999:7999 --link postgresql:db atlassian/bitbucket-server \
     --volumes-from bitbucket\_datastore
 
 The port 7999 is used to SSH git access and 7990 for web access
