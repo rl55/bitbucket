@@ -1,6 +1,6 @@
-FROM atende/baseimage-jdk
+FROM atlassian/bitbucket-server
 
-MAINTAINER Giovanni Silva giovanni@atende.info
+MAINTAINER Atlassian
 
 ENV SOFTWARE_NAME=bitbucket
 
