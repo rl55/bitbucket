@@ -1,4 +1,4 @@
-FROM atlassian/bitbucket-server
+FROM atende/baseimage-jdk
 
 MAINTAINER Atlassian
 
